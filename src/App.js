@@ -1,61 +1,54 @@
 import React from "react";
-import { compose, withProps } from "recompose";
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker
-} from "react-google-maps";
-import mapsStyle from "./mapsStyle.json";
-import Geolocation from "react-geolocation";
+import { geolocated } from "react-geolocated";
+import { MyMapComponent } from "./comps/Map";
+import Destination from "./comps/Destination/Destination";
 
-const apiKey = "AIzaSyAHFkbhHMtXhADOWYR645JeaxjYP5wJ3Z0";
+import "./App.css";
 
-const MyMapComponent = compose(
-  withProps({
-    googleMapURL: `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${apiKey}`,
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `100vh` }} />,
-    mapElement: <div style={{ height: `100%` }} />
-  }),
-  withScriptjs,
-  withGoogleMap
-)(props => (
-  <GoogleMap
-    defaultOptions={{ styles: mapsStyle }}
-    defaultZoom={15}
-    defaultCenter={{ lat: Number(props.lat), lng: Number(props.long) }}
-  >
-    {props.isMarkerShown && <Marker position={{ lat: 18, lng: 59 }} />}
-  </GoogleMap>
-));
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      destinationChosen: false,
+      destination: {}
+    };
+  }
 
-export default class App extends React.Component {
   render() {
-    return (
-      <Geolocation
-        render={({
-          fetchingPosition,
-          position: { coords: { latitude, longitude } = {} } = {},
-          error,
-          getCurrentPosition
-        }) => (
-          <div>
-            <button onClick={getCurrentPosition}>Get Position</button>
-            {error && <div>{error.message}</div>}
-            <pre>
-              latitude: {latitude}
-              longitude: {longitude}
-            </pre>
-            <MyMapComponent
-              test="hello"
-              isMarkerShown
-              lat={latitude}
-              long={longitude}
-            />
-          </div>
+    return !this.props.isGeolocationAvailable ? (
+      <p>Allow geolocation please.</p>
+    ) : this.props.coords ? (
+      <div>
+        {this.state.destinationChosen ? (
+          <MyMapComponent
+            test="hello"
+            isMarkerShown
+            lat={Number(this.state.destination.lat)}
+            long={Number(this.state.destination.lng)}
+          />
+        ) : (
+          <MyMapComponent
+            test="hello"
+            isMarkerShown
+            lat={this.props.coords.latitude}
+            long={this.props.coords.longitude}
+          />
         )}
-      />
+        <Destination
+          setDestination={city =>
+            this.setState({ destination: city, destinationChosen: true })
+          }
+        />
+      </div>
+    ) : (
+      <p>Getting location data...</p>
     );
   }
 }
+
+export default geolocated({
+  positionOptions: {
+    enableHighAccuracy: false
+  },
+  userDecisionTimeout: 5000
+})(App);
