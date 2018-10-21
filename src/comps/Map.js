@@ -21,12 +21,23 @@ export const MyMapComponent = compose(
 )(props => (
   <GoogleMap
     defaultOptions={{ styles: mapsStyle }}
-    defaultZoom={15}
+    defaultZoom={5}
     defaultCenter={{ lat: props.lat, lng: props.long }}
     center={{ lat: props.lat, lng: props.long }}
   >
     {props.isMarkerShown && (
       <Marker position={{ lat: props.lat, lng: props.long }} />
+    )}
+    {props.destination && (
+      <Marker
+        icon={{
+          url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+        }}
+        position={{
+          lat: Number(props.destination.lat),
+          lng: Number(props.destination.lng)
+        }}
+      />
     )}
   </GoogleMap>
 ));

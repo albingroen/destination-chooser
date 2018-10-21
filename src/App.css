@@ -3,3 +3,58 @@
   margin: 0;
   box-sizing: border-box;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+button {
+  font-weight: normal;
+}
+
+.destinationInfo {
+  position: fixed;
+  left: 10px;
+  top: 62px;
+  background: #222;
+  border-radius: 3px;
+  padding: 1rem;
+  width: 300px;
+  color: white;
+}
+
+.destinationInfo2 {
+  position: fixed;
+  left: 10px;
+  top: 162px;
+  background: #222;
+  border-radius: 3px;
+  padding: 1rem;
+  width: 300px;
+  color: white;
+}
+
+.destinationInfo3 {
+  position: fixed;
+  left: 10px;
+  top: 262px;
+  background: #222;
+  border-radius: 3px;
+  padding: 1rem;
+  width: 300px;
+  color: white;
+}
+
+.destinationInfo label,
+.destinationInfo2 label,
+.destinationInfo3 label {
+  font-size: 0.9em;
+  opacity: 0.75;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+}

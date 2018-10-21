@@ -14,7 +14,29 @@ class App extends React.Component {
     };
   }
 
+  deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
+
+  destinationDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = this.deg2rad(lat2 - lat1); // this.deg2rad below
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) *
+        Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return Math.round(d);
+  }
+
   render() {
+    const { coords } = this.props;
+    const { destination } = this.state;
+
     return !this.props.isGeolocationAvailable ? (
       <p>Allow geolocation please.</p>
     ) : this.props.coords ? (
@@ -23,8 +45,9 @@ class App extends React.Component {
           <MyMapComponent
             test="hello"
             isMarkerShown
-            lat={Number(this.state.destination.lat)}
-            long={Number(this.state.destination.lng)}
+            lat={this.props.coords.latitude}
+            long={this.props.coords.longitude}
+            destination={this.state.destination}
           />
         ) : (
           <MyMapComponent
@@ -39,6 +62,38 @@ class App extends React.Component {
             this.setState({ destination: city, destinationChosen: true })
           }
         />
+        {this.state.destinationChosen && (
+          <div>
+            <div className="destinationInfo">
+              <label htmlFor="distance">Distance (km)</label>
+              <h2>
+                {this.destinationDistance(
+                  coords.latitude,
+                  coords.longitude,
+                  Number(destination.lat),
+                  Number(destination.lng)
+                )}{" "}
+                km
+              </h2>
+            </div>
+            <div className="destinationInfo2">
+              <label htmlFor="distance">Distance (m)</label>
+              <h2>
+                {this.destinationDistance(
+                  coords.latitude,
+                  coords.longitude,
+                  Number(destination.lat),
+                  Number(destination.lng)
+                ) / 10}{" "}
+                m
+              </h2>
+            </div>
+            <div className="destinationInfo3">
+              <label htmlFor="distance">Destination</label>
+              <h2>{destination.name}</h2>
+            </div>
+          </div>
+        )}
       </div>
     ) : (
       <p>Getting location data...</p>
