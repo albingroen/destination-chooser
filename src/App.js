@@ -39,7 +39,9 @@ class App extends React.Component {
     const { destination, destinationChosen } = this.state;
 
     return !isGeolocationAvailable ? (
-      <p>Allow geolocation please.</p>
+      <div className="page-wrapper">
+        <h2>Please allow location for this to work</h2>
+      </div>
     ) : coords ? (
       <div>
         {destinationChosen ? (
@@ -96,7 +98,9 @@ class App extends React.Component {
         )}
       </div>
     ) : (
-      <p>Getting location data...</p>
+      <div className="page-wrapper">
+        <h2>Fetching location information...</h2>
+      </div>
     );
   }
 }
