@@ -1,5 +1,5 @@
 {
-  "name": "google-maps-test",
+  "name": "destination-chooser",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
