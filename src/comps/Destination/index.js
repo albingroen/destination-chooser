@@ -3,8 +3,8 @@ import cities from "cities.json";
 import "./style.css";
 
 class Destination extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       value: "",
       cityContainer: false
@@ -16,12 +16,17 @@ class Destination extends Component {
   handleChange(e) {
     this.setState({
       value: e.target.value,
-      cityContainer: this.state.value.length > 0 ? true : false
+      cityContainer: true
     });
   }
 
   render() {
+    const { setDestination } = this.props;
+    const { value, cityContainer } = this.state;
+
+    // Limiting cities to only cities in Sweden to improve performance
     const seCities = [];
+
     cities
       .filter(city => {
         return city.country === "SE";
@@ -35,28 +40,26 @@ class Destination extends Component {
         <div>
           <input
             type="text"
-            value={this.state.value}
+            value={value}
             onChange={this.handleChange}
             placeholder="Where do you want to go?"
           />
         </div>
 
-        {this.state.cityContainer && (
+        {cityContainer && (
           <ul>
             {seCities &&
               seCities.length > 0 &&
               seCities
                 .filter(city => {
-                  return city.name
-                    .toUpperCase()
-                    .includes(this.state.value.toUpperCase());
+                  return city.name.toUpperCase().includes(value.toUpperCase());
                 })
                 .map((city, index) => {
                   return (
                     <li
                       key={(city, index)}
                       onClick={() => {
-                        this.props.setDestination(city);
+                        setDestination(city);
                         this.setState({ value: "", cityContainer: false });
                       }}
                     >
