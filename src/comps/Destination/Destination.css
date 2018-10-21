@@ -8,7 +8,6 @@
   border-radius: 3px;
   padding: 20px;
   width: 50%;
-  height: 100px;
 }
 
 .destinationContainer div {
@@ -35,7 +34,7 @@
   padding: 1rem;
   color: white;
   display: block;
-  width: 59%;
+  width: 100%;
 }
 
 .destinationContainer div input::-webkit-input-placeholder {
@@ -95,5 +94,10 @@
 
 .destinationContainer ul li:nth-child(odd) {
   background: #f2f2f2;
+}
+
+.destinationContainer ul li:hover {
+  background: dodgerblue;
+  color: white;
 }
 /*# sourceMappingURL=Destination.css.map */
