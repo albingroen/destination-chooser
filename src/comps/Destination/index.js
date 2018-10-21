@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import cities from "cities.json";
-import "./Destination.css";
+import "./style.css";
 
 class Destination extends Component {
   constructor(props) {

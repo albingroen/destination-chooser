@@ -1,8 +1,7 @@
 import React from "react";
 import { geolocated } from "react-geolocated";
-import { MyMapComponent } from "./comps/Map";
-import Destination from "./comps/Destination/Destination";
-
+import { Map } from "./comps/Map/index";
+import Destination from "./comps/Destination";
 import "./App.css";
 
 class App extends React.Component {
@@ -14,10 +13,12 @@ class App extends React.Component {
     };
   }
 
+  // Function for transforming degrees to radians
   deg2rad(deg) {
     return deg * (Math.PI / 180);
   }
 
+  // Function for calulating distance in km between 2 coordinates
   destinationDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the earth in km
     const dLat = this.deg2rad(lat2 - lat1); // this.deg2rad below
@@ -34,35 +35,32 @@ class App extends React.Component {
   }
 
   render() {
-    const { coords } = this.props;
-    const { destination } = this.state;
+    const { coords, isGeolocationAvailable } = this.props;
+    const { destination, destinationChosen } = this.state;
 
-    return !this.props.isGeolocationAvailable ? (
+    return !isGeolocationAvailable ? (
       <p>Allow geolocation please.</p>
-    ) : this.props.coords ? (
+    ) : coords ? (
       <div>
-        {this.state.destinationChosen ? (
-          <MyMapComponent
-            test="hello"
+        {destinationChosen ? (
+          <Map
             isMarkerShown
-            lat={this.props.coords.latitude}
-            long={this.props.coords.longitude}
-            destination={this.state.destination}
+            lat={coords.latitude}
+            lng={coords.longitude}
+            destination={destination}
           />
         ) : (
-          <MyMapComponent
-            test="hello"
-            isMarkerShown
-            lat={this.props.coords.latitude}
-            long={this.props.coords.longitude}
-          />
+          <Map isMarkerShown lat={coords.latitude} lng={coords.longitude} />
         )}
+
         <Destination
           setDestination={city =>
             this.setState({ destination: city, destinationChosen: true })
           }
         />
-        {this.state.destinationChosen && (
+
+        {/* Here we just render some cards with information about the destination */}
+        {destinationChosen && (
           <div>
             <div className="destinationInfo">
               <label htmlFor="distance">Distance (km)</label>
@@ -76,6 +74,7 @@ class App extends React.Component {
                 km
               </h2>
             </div>
+
             <div className="destinationInfo2">
               <label htmlFor="distance">Distance (m)</label>
               <h2>
@@ -88,6 +87,7 @@ class App extends React.Component {
                 m
               </h2>
             </div>
+
             <div className="destinationInfo3">
               <label htmlFor="distance">Destination</label>
               <h2>{destination.name}</h2>
