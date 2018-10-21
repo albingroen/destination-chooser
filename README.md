@@ -2,6 +2,8 @@
 
 A easy to use destination finder with Google Maps and React to get some basic meta data about the destination.
 
+### Please feel free to fork and create a pull request with any enhancement possible!
+
 ## Built with
 
 - React
